@@ -11,27 +11,27 @@ def calculate_points(result: list) -> list:
     point_list = []
     last_frame = result[len(result) - 1]
 
-    for frame in range(len(result)-1):
+    for frame in range(len(result) - 1):
         try:
             if result[frame][0] == 'X':
                 points += 10
-                if result[frame+1][0] == 'X':
+                if result[frame + 1][0] == 'X':
                     points += 10
-                    if result[frame+2][0] == 'X':
+                    if result[frame + 2][0] == 'X':
                         points += 10
                     else:
-                        points += result[frame+2][0]
-                elif result[frame+1][1] == '/':
+                        points += result[frame + 2][0]
+                elif result[frame + 1][1] == '/':
                     points += 10
                 else:
-                    points += result[frame+1][0] + result[frame+1][1]
+                    points += result[frame + 1][0] + result[frame + 1][1]
 
             elif result[frame][1] == '/':
                 points += 10
-                if result[frame+1][0] == 'X':
+                if result[frame + 1][0] == 'X':
                     points += 10
                 else:
-                    points += result[frame+1][0]
+                    points += result[frame + 1][0]
 
             else:
                 points += result[frame][0] + result[frame][1]
@@ -49,7 +49,7 @@ def calculate_points(result: list) -> list:
             points += 10
         if last_frame[throw] == '/':
             points += 10
-            points -= last_frame[throw-1]
+            points -= last_frame[throw - 1]
         if isinstance(last_frame[throw], int):
             points += last_frame[throw]
 
@@ -63,10 +63,9 @@ player_one_gamebar.pack()
 smallFrameTemplate = tk.Frame(player_one_gamebar)
 smallFrameTemplate.pack()
 
-
 tk.mainloop()
 
-
-calculate_points([['X'],[9,'/'],[5,'/'],[7,2],['X'],['X'],['X'],[9,0],[8,'/'],[9,'/','X']])
-calculate_points([[1,4],[4,5],[6,'/'],[5,'/'],['X'],[0,1],[7,'/'],[6,'/'],['X'],[2,'/',6]])
-calculate_points([['X'],['X'],['X'],['X'],['X'],['X'],['X'],['X'],['X'],['X','X','X']])
+calculate_points([['X'], [9, '/'], [5, '/'], [7, 2], ['X'], ['X'], ['X'], [9, 0], [8, '/'], [9, '/', 'X']])
+calculate_points([[1, 4], [4, 5], [6, '/'], [5, '/'], ['X'], [0, 1], [7, '/'], [6, '/'], ['X'], [2, '/', 6]])
+calculate_points([['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X', 'X', 'X']])
+calculate_points([['X'], [7, '/'], [7, 2], [9, '/'], ['X'], ['X'], ['X'], [2, 3], [6, '/'], [7, '/', 3]])
