@@ -1,12 +1,22 @@
 import tkinter as tk
 
+players = 2
+plays = 10
+
 main_page = tk.Tk()
-main_page.geometry("380x120")
 main_page.title("BowlingAlley")
+main_frame = tk.Frame(main_page)
+main_frame.pack()
+
+
+def numv(char):
+    try:
+        return int(char)
+    except ValueError:
+        return char
 
 
 def calculate_points(result: list) -> list:
-    print("Przebieg gry: ", result)
     points = 0
     point_list = []
     last_frame = result[len(result) - 1]
@@ -54,18 +64,60 @@ def calculate_points(result: list) -> list:
             points += last_frame[throw]
 
     point_list.append(points)
-    print(point_list)
     return point_list
 
 
-player_one_gamebar = tk.Frame(main_page)
-player_one_gamebar.pack()
-smallFrameTemplate = tk.Frame(player_one_gamebar)
-smallFrameTemplate.pack()
+def get_and_show(mainframe: tk.Frame):
+    playerlist = mainframe.winfo_children()
+    playerlist.pop()
+    for player in playerlist:
+        result = []
+        frames = player.winfo_children()
+        frames.pop(0)
+        for frame in frames:
+            throws = frame.winfo_children()
+            throws.pop()
+            throw0 = throws[0].get()
+            throw1 = throws[1].get()
+            if throw0 == ('X' or 'x') or throw1 == ('X' or 'x'):
+                frame_result = ['X']
+            else:
+                frame_result = [numv(throw0), numv(throw1)]
+            if len(throws) == 3:
+                throw2 = throws[2].get()
+                frame_result = [numv(throw0), numv(throw1), numv(throw2)]
+            result.append(frame_result)
+        points = calculate_points(result)
+        for i, frame in enumerate(frames):
+            scores = frame.winfo_children()
+            scores = scores.pop()
+            scores.config(text=str(points[i]))
 
+
+def create_players(player_count: int, frames_count: int, mainframe: tk.Frame):
+    for q in range(player_count):
+        gamebar = tk.Frame(mainframe)
+        gmb_label = tk.Label(gamebar, text="Player " + str(q + 1))
+        gmb_label.grid(row=0, column=0, padx=5, pady=5)
+        for i in range(frames_count):
+            small_frame_template = tk.Frame(gamebar, background='BLACK', borderwidth=1)
+            throw_one_entry = tk.Entry(small_frame_template, width=1)
+            throw_one_entry.grid(row=0, column=0, padx=5, pady=5)
+            throw_two_entry = tk.Entry(small_frame_template, width=1)
+            throw_two_entry.grid(row=0, column=1, padx=5, pady=5)
+            if i == frames_count - 1:
+                throw_three_entry = tk.Entry(small_frame_template, width=1)
+                throw_three_entry.grid(row=0, column=2, padx=5, pady=5)
+                point_label = tk.Label(small_frame_template)
+                point_label.grid(row=1, column=0, columnspan=3, padx=5, pady=5)
+            else:
+                point_label = tk.Label(small_frame_template)
+                point_label.grid(row=1, column=0, columnspan=2, padx=5, pady=5)
+            small_frame_template.grid(row=0, column=i + 1, padx=5, pady=5)
+        gamebar.grid(row=q, column=0, padx=5, pady=5)
+
+
+create_players(players, plays, main_frame)
+calculate_button = tk.Button(main_frame, text="Calculate points", command=lambda: get_and_show(main_frame))
+calculate_button.grid(row=0, column=1, padx=5, pady=5)
 tk.mainloop()
-
-calculate_points([['X'], [9, '/'], [5, '/'], [7, 2], ['X'], ['X'], ['X'], [9, 0], [8, '/'], [9, '/', 'X']])
-calculate_points([[1, 4], [4, 5], [6, '/'], [5, '/'], ['X'], [0, 1], [7, '/'], [6, '/'], ['X'], [2, '/', 6]])
-calculate_points([['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X', 'X', 'X']])
-calculate_points([['X'], [7, '/'], [7, 2], [9, '/'], ['X'], ['X'], ['X'], [2, 3], [6, '/'], [7, '/', 3]])
