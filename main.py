@@ -1,6 +1,6 @@
 import tkinter as tk
 
-players = 2
+players = 1
 plays = 10
 
 main_page = tk.Tk()
@@ -51,6 +51,13 @@ def calculate_points(result: list) -> list:
                 points += 10
             else:
                 points += result[frame + 1][1]
+        except TypeError:
+                for _ in range(len(result)):
+                    try:
+                        point_list.append(point_list[-1])
+                    except IndexError:
+                        point_list.append(0)
+                return point_list
 
         point_list.append(points)
 
