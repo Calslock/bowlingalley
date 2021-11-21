@@ -1,6 +1,7 @@
 from main import numv, calculate_points
 from parameterized import parameterized
 import unittest
+from unittest_dataprovider import data_provider
 
 
 class TestCalculation(unittest.TestCase):
@@ -26,4 +27,38 @@ class TestConversion(unittest.TestCase):
         ["string", "ananas", "ananas"],
     ])
     def test_numv(self, name, charin, charout):
+        self.assertEqual(numv(charin), charout)
+
+
+class TestCalculationDataProvider(unittest.TestCase):
+    @staticmethod
+    def plays():
+        return (
+            ([['X'], [9, '/'], [5, '/'], [7, 2], ['X'], ['X'], ['X'], [9, 0], [8, '/'], [9, '/', 'X']],
+             [20, 35, 52, 61, 91, 120, 139, 148, 167, 187]),
+            ([[1, 4], [4, 5], [6, '/'], [5, '/'], ['X'], [0, 1], [7, '/'], [6, '/'], ['X'], [2, '/', 6]],
+             [5, 14, 29, 49, 60, 61, 77, 97, 117, 133]),
+            ([['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X'], ['X', 'X', 'X']],
+             [30, 60, 90, 120, 150, 180, 210, 240, 270, 300]),
+            ([['X'], [7, '/'], [7, 2], [9, '/'], ['X'], ['X'], ['X'], [2, 3], [6, '/'], [7, '/', 3]],
+             [20, 37, 46, 66, 96, 118, 133, 138, 155, 168]),
+        )
+
+    @data_provider(plays)
+    def testdp_calculate_points(self, game, points):
+        self.assertEqual(calculate_points(game), points)
+
+
+class TestConversionDataProvider(unittest.TestCase):
+    @staticmethod
+    def variables():
+        return (
+            ('5', 5),
+            ('51', 51),
+            ('x', 'x'),
+            ("ananas", "ananas"),
+        )
+
+    @data_provider(variables)
+    def testdp_numv(self, charin, charout):
         self.assertEqual(numv(charin), charout)
